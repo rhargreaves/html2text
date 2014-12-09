@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlToText", "HtmlToText.csproj", "{54DB6BDC-F08C-4422-8FFC-0A9CE6FD87E7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlToText", "HtmlToText\HtmlToText.csproj", "{54DB6BDC-F08C-4422-8FFC-0A9CE6FD87E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
