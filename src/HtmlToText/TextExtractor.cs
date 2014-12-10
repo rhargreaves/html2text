@@ -9,16 +9,21 @@ namespace HtmlToText
 {
     public class TextExtractor
     {
-        private readonly HashSet<string> _elementNamesThatImplyNewLine = new HashSet<string>
+        private readonly HashSet<string> _elementNamesThatImplySingleNewLineAfterText = new HashSet<string>
         {
             "li",
             "div",
-            "ul",
+            "ul"
+        };
+
+        private readonly HashSet<string> _elementNamesThatImplyDoubleNewLineAfterText = new HashSet<string>
+        {
             "p",
             "h1",
             "h2",
             "h3",
-            "h4"
+            "h4",
+            "section"
         };
 
         private readonly HashSet<string> _formElementNames = new HashSet<string>
@@ -27,7 +32,8 @@ namespace HtmlToText
             "textarea",
             "button",
             "option",
-            "select"
+            "select",
+            "input"
         };
 
         public void ExtractTextAndWrite(IEnumerable<HtmlNode> nodes, TextWriter writer)
@@ -56,11 +62,10 @@ namespace HtmlToText
             if (node.Name == "script" || node.Name == "style" || _formElementNames.Contains(node.Name))
                 return false;
 
-            if (node.Name == "a")
+            if (node.Name == "br")
             {
-                HtmlNodeCollection siblings = node.ParentNode.ChildNodes;
-                if (!siblings.Any(n => n.Name != "a" && !string.IsNullOrEmpty(node.InnerText)))
-                    return false;
+                writer.WriteLine();
+                return true;
             }
 
             bool written = false;
@@ -69,8 +74,10 @@ namespace HtmlToText
                 written = ExtractTextAndWrite(child, writer);
             }
 
-            if (written && _elementNamesThatImplyNewLine.Contains(node.Name))
+            if (written && _elementNamesThatImplySingleNewLineAfterText.Contains(node.Name))
                 writer.WriteLine();
+            else if (written && _elementNamesThatImplyDoubleNewLineAfterText.Contains(node.Name))
+                writer.WriteLine(Environment.NewLine);
 
             return written;
         }
